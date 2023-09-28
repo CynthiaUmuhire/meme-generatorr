@@ -7,7 +7,9 @@ const Form = () => {
 
     const [image, setImage] = useState()
     useEffect(() => {
-        fetch("https://api.imgflip.com/get_memes")
+        const controller = new AbortController();
+        const { signal } = controller;
+        fetch("https://api.imgflip.com/get_memes",{signal})
             .then((res) => res.json())
             .then((data) => {
                 setMeme(data.data.memes);
@@ -15,6 +17,9 @@ const Form = () => {
                 setImage(data.data.memes[0].url)
 
             })
+        return  () => {
+            controller.abort();
+        }
     }, [])
 
 
